@@ -1,0 +1,7 @@
+These are the Ruby scripts used to create the database tables for myTranspo, and then populate them with data. The scripts use Sequel to interact with the database, so they should, in theory, be database agnostic. I've tried them with MySQL, SQLite, and H2 successfully. 
+
+create-database.rb - creates the table, and sets up indices so that data is read very quickly when performing joins across multiple tables. 
+
+import-gtfs.rb - imports the GTFS feed data into the database. This script also alters some stop times to put them in proper 24 hour time format. Specifically, the vast majority (but not quite all) of stop times between midnight and 4 a.m. show up as 25:xx, 26:xx, 27:xx, etcetera. While this may match the GTFS spec, it makes can make things difficult when trying to do comparisons with the stop times, such as trying to find all of the stop times for a particular stop between 2:30 and 4:30 a.m. 
+
+
