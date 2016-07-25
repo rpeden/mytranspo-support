@@ -3,7 +3,7 @@ require 'rubygems'
 require 'sequel'
 
 
-DB = Sequel.connect('sqlite://transpo.db')
+DB = Sequel.connect('jdbc:sqlite:transpo.db')
 
 DB.execute("PRAGMA default_cache_size = 200000")
 DB.execute("PRAGMA default_synchronous = OFF")
@@ -23,7 +23,7 @@ DB.execute("PRAGMA temp_store = MEMORY")
       column(:stop_name, :varchar, {:size => 50, :null => false})
       column(:stop_lat, :float, {:null => false})
       column(:stop_lon, :float, {:null => false})
-      primary_key(:stop_id)
+      primary_key(:id)
       index([:stop_id, :stop_lat, :stop_lon])
     end
 
@@ -32,21 +32,22 @@ DB.execute("PRAGMA temp_store = MEMORY")
       column(:route_id, :varchar, {:size => 40, :null => false})
       column(:service_id, :varchar, {:size => 50, :null => false})
       column(:trip_headsign, :varchar, {:size => 50})
-      column(:block_id, :integer, { :null => false })
-      primary_key(:trip_id)
+      column(:block_id, :integer)
+      primary_key(:id)
       index([:trip_id, :route_id])
     end
 
     DB.create_table :routes do
       column(:route_id, :varchar, {:size => 40, :auto_increment => false, :unique => true, :null => false} )
       column(:route_short_name, :varchar, {:size => 5, :null => false})
-      primary_key(:route_id)
+      column(:route_long_name, :varchar, {:size => 200, :null => false})
+      primary_key(:id)
     end
 
     DB.create_table :stop_times do
       column(:stop_id, :varchar, {:size => 10, :null => false})
       column(:trip_id, :varchar, {:size => 50, :null => false})
       column(:departure_time, :time, {:null => false})
-      primary_key(:stop_id)
+      primary_key(:id)
       index([:stop_id, :departure_time])
     end

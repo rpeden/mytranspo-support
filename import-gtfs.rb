@@ -5,9 +5,9 @@ require 'sequel'
 require 'benchmark'
 
 
+DB = Sequel.connect('jdbc:sqlite:transpo.db')
 
-
-DB = Sequel.connect(:adapter=>'mysql', :socket=>'/var/run/mysqld/mysqld.sock', :database=>'transpo', :user=>'', :password=>'')
+#DB = Sequel.connect(:adapter=>'mysql', :socket=>'/var/run/mysqld/mysqld.sock', :database=>'transpo', :user=>'', :password=>'')
 
 #populate stops table
 elapsed = Benchmark.realtime do
@@ -46,7 +46,9 @@ elapsed = Benchmark.realtime do
     
 	CSV.foreach("routes.txt", :headers => true) do |row|
       
-	    routes.insert(:route_id => row['route_id'], :route_short_name => row['route_short_name'])
+	    routes.insert(:route_id => row['route_id'], 
+					  :route_short_name => row['route_short_name'],
+					  :route_long_name  => row['route_long_name'])
       
 	    #puts("Route #{row['route_short_name']} inserted.")
     
